@@ -1,6 +1,6 @@
-# pumpkin
+# Rocket
 
-Continuation of last week's project: https://github.com/ArcaEge/leaf
+Continuation of last week's project: https://github.com/ArcaEge/pumpkin
 
 A template site for a mysterious Hack Club YSWS event, I'll be reusing the same site design but with different content.
 

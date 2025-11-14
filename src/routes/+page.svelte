@@ -212,10 +212,10 @@
 
 <div class="flex w-full flex-col items-center justify-center px-10 lg:flex-row">
 	<div class="mt-40">
-		<h1 class="font-hero text-4xl sm:text-5xl md:text-6xl">Pumpkin</h1>
+		<h1 class="font-hero text-4xl sm:text-5xl md:text-6xl">Rocket</h1>
 		<p class="my-3 text-xl font-medium">
-			You ship: pumpkin design<br />
-			We ship: very cool pumpkin
+			You ship: rocket design<br />
+			We ship: very cool rocket
 		</p>
 		{#if data.loggedIn}
 			<Button text="Go to dashboard" href="/dashboard" />
@@ -223,11 +223,9 @@
 			<Button text="Login with Slack" href="/auth/slack" />
 		{/if}
 	</div>
-	<div class="h-80 w-80 md:w-100 flex flex-col mt-12">
+	<div class="mt-12 flex h-80 w-80 flex-col md:w-100">
 		<canvas class="h-full w-full" id={`canvas`}></canvas>
-		<p class="text-sm w-full text-center mt-2">
-			interact with me!
-		</p>
+		<p class="mt-2 w-full text-center text-sm">interact with me!</p>
 	</div>
 </div>
 
@@ -235,8 +233,8 @@
 	<h1 class="mb-3 text-center text-3xl font-bold sm:text-4xl">What is this?</h1>
 	<div class="w-full max-w-2xl">
 		<p class="mt-3 max-w-2xl">
-			<strong>Ever wanted to own a cool pumpkin?</strong> Now, you can do so! All you need to do is spend
-			10 hours designing a pumpkin in CAD and we'll ship one right to your house, completely for free.
+			<strong>Ever wanted to own a cool rocket?</strong> Now, you can do so! All you need to do is spend
+			10 hours designing a rocket in CAD and we'll ship one right to your house, completely for free.
 		</p>
 	</div>
 </div>
@@ -256,7 +254,7 @@
 			</p>
 		</Accordion>
 		<Accordion text="What can I make?">
-			<p>Any sort of reasonable Halloween-y pumpkin design is fine, get creative!</p>
+			<p>Any sort of reasonable rocket design is fine, get creative!</p>
 		</Accordion>
 		<Accordion text="What are the requirements?">
 			<p>
@@ -264,8 +262,14 @@
 				Onshape-Wakatime.
 			</p>
 		</Accordion>
-		<Accordion text="Where did you get these pumpkins from?">
-			<p>We blackmailed a local farm.</p>
+		<Accordion text="How will you deliver it?">
+			<p>
+				You'll wake up to a big rocket towering over your house at 6am in the morning on a random
+				Saturday.
+			</p>
+		</Accordion>
+		<Accordion text="Where did you get these rockets from?">
+			<p>We blackmailed SpaceX and NASA.</p>
 		</Accordion>
 	</div>
 </div>

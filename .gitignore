@@ -27,3 +27,6 @@ vite.config.ts.timestamp-*
 
 uploads/images/*-*.*
 uploads/models/*-*.*
+
+# no leaky
+*.NOLEAKY.*

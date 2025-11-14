@@ -2,6 +2,7 @@
 	import SidebarButton from './SidebarButton.svelte';
 	import { House, PencilRuler, Compass, ShoppingCart, LogOut } from '@lucide/svelte';
 	import { page } from '$app/state';
+	import logo from '$lib/assets/logo.NOLEAKY.png';
 
 	let { user } = $props();
 
@@ -14,6 +15,11 @@
 <div
 	class="m-5 flex w-60 2xl:w-70 flex-none flex-col gap-2 themed-box p-3 shadow-lg/20"
 >
+	<div class="mb-0">
+		<a href="/">
+			<img src={logo} alt="logo">
+		</a>
+	</div>
 	<SidebarButton icon={House} href="/dashboard" exact>Home</SidebarButton>
 	<SidebarButton icon={PencilRuler} href="/dashboard/projects">Projects</SidebarButton>
 	<SidebarButton icon={Compass} href="/dashboard/explore">Explore</SidebarButton>
