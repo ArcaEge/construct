@@ -11,6 +11,10 @@ export function load({ locals }) {
 			slackId: locals.user.slackId,
 			name: locals.user.name,
 			profilePicture: locals.user.profilePicture,
+			hasT1Review: locals.user.hasT1Review,
+			hasT2Review: locals.user.hasT2Review,
+			hasProjectAuditLogs: locals.user.hasProjectAuditLogs,
+			hasSessionAuditLogs: locals.user.hasSessionAuditLogs,
 		}
 	};
 }

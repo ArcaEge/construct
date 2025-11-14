@@ -25,14 +25,14 @@ export async function GET(event) {
 	const cookieState = cookies.get('oauth_state');
 
 	if (!cookieState || cookieState !== urlState) {
-		let redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
+		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
 		return redirect(302, redirectURL);
 	}
 
 	cookies.delete('oauth_state', { path: '/' });
 
 	// Get token
-	let openidConnectTokenURL = new URL('https://slack.com/api/openid.connect.token');
+	const openidConnectTokenURL = new URL('https://slack.com/api/openid.connect.token');
 	openidConnectTokenURL.searchParams.set('code', code);
 	openidConnectTokenURL.searchParams.set(
 		'client_id',
@@ -49,21 +49,21 @@ export async function GET(event) {
 	});
 
 	if (!openidConnectTokenRes.ok) {
-		let redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
+		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
 		return redirect(302, redirectURL);
 	}
 
-	let openidConnectTokenJSON = await openidConnectTokenRes.json();
+	const openidConnectTokenJSON = await openidConnectTokenRes.json();
 
 	if (openidConnectTokenJSON['ok'] !== true) {
-		let redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
+		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
 		return redirect(302, redirectURL);
 	}
 
 	const token = openidConnectTokenJSON['access_token'];
 
 	// Get user data
-	let openidConnectDataURL = new URL('https://slack.com/api/openid.connect.userInfo');
+	const openidConnectDataURL = new URL('https://slack.com/api/openid.connect.userInfo');
 	const openidConnectDataRes = await fetch(openidConnectDataURL, {
 		method: 'POST',
 		headers: {
@@ -72,14 +72,14 @@ export async function GET(event) {
 	});
 
 	if (!openidConnectDataRes.ok) {
-		let redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
+		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
 		return redirect(302, redirectURL);
 	}
 
-	let openidConnectDataJSON = await openidConnectDataRes.json();
+	const openidConnectDataJSON = await openidConnectDataRes.json();
 
 	if (openidConnectDataJSON['ok'] !== true) {
-		let redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
+		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
 		return redirect(302, redirectURL);
 	}
 
@@ -102,15 +102,18 @@ export async function GET(event) {
 			.where(eq(user.slackId, slackId));
 	} else {
 		// Create user
-		await db
-			.insert(user)
-			.values({
-				slackId: slackId,
-				name: name,
-				profilePicture: profilePic,
-				createdAt: new Date(Date.now()),
-				lastLoginAt: new Date(Date.now())
-			});
+		await db.insert(user).values({
+			slackId: slackId,
+			name: name,
+			profilePicture: profilePic,
+			createdAt: new Date(Date.now()),
+			lastLoginAt: new Date(Date.now()),
+			// TODO: remove these after siege
+			hasT1Review: true,
+			hasT2Review: true,
+			hasProjectAuditLogs: true,
+			hasSessionAuditLogs: true
+		});
 
 		databaseUser = await db.select().from(user).where(eq(user.slackId, slackId)).get();
 
@@ -128,6 +131,6 @@ export async function GET(event) {
 		new Date(Date.now() + DAY_IN_MS * SESSION_EXPIRY_DAYS)
 	);
 
-	let redirectURL = new URL(`${url.protocol}//${url.host}/dashboard`);
+	const redirectURL = new URL(`${url.protocol}//${url.host}/dashboard`);
 	return redirect(302, redirectURL);
 }
