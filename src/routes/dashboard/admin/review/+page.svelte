@@ -1,22 +1,23 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { projectStatuses } from '$lib/utils.js';
+	import { ExternalLink } from '@lucide/svelte';
+	import relativeDate from 'tiny-relative-date';
 
-	let { data } = $props();
+	let { data, form } = $props();
 
 	let projectSearch = $state('');
 	let userSearch = $state('');
 
-	let projects = $derived(data.projects);
+	let projects = $derived(form?.projects ?? data.projects);
 
 	let filteredProjects = $derived(
-		data.projects.filter((project) =>
-			project.project.name?.toLowerCase().includes(projectSearch.toLowerCase())
+		data.allProjects.filter((project) =>
+			project.name?.toLowerCase().includes(projectSearch.toLowerCase())
 		)
 	);
 	let filteredUsers = $derived(
-		data.users.filter((user) =>
-			user.name.toLowerCase().includes(userSearch.toLowerCase())
-		)
+		data.users.filter((user) => user.name.toLowerCase().includes(userSearch.toLowerCase()))
 	);
 </script>
 
@@ -33,7 +34,7 @@
 					<select
 						class="grow border-3 border-amber-700 bg-amber-900 fill-amber-50 p-2 text-sm ring-amber-900 placeholder:text-amber-900 active:ring-3"
 						name="status"
-						value="submitted"
+						value={form?.fields.status ?? ['submitted']}
 						multiple
 					>
 						<option value="building">Building</option>
@@ -55,9 +56,14 @@
 						bind:value={projectSearch}
 						class="themed-input-light border-b-0 py-1.5"
 					/>
-					<select class="themed-input-light grow" name="project" multiple>
+					<select
+						class="themed-input-light grow"
+						name="project"
+						value={form?.fields.project ?? []}
+						multiple
+					>
 						{#each filteredProjects as project}
-							<option value={project.project.id} class="truncate">{project.project.name}</option>
+							<option value={project.id} class="truncate">{project.name}</option>
 						{/each}
 					</select>
 				</label>
@@ -71,7 +77,12 @@
 						bind:value={userSearch}
 						class="themed-input-light border-b-0 py-1.5"
 					/>
-					<select class="themed-input-light grow" name="user" multiple>
+					<select
+						class="themed-input-light grow"
+						name="user"
+						value={form?.fields.user ?? []}
+						multiple
+					>
 						{#each filteredUsers as user}
 							<option value={user?.id} class="truncate">{user?.name}</option>
 						{/each}
@@ -84,4 +95,40 @@
 	<div class="themed-box min-w-[30%] grow p-3">
 		<h2 class="text-xl font-bold">Leaderboard</h2>
 	</div>
+</div>
+
+<div>
+	{#each projects as project}
+		<div class="themed-box relative flex flex-col p-3 shadow-lg/20 transition-all hover:scale-102">
+			<a
+				class="absolute inset-0 z-1"
+				href={`/dashboard/projects/${project.project.id}`}
+				aria-label="project"
+			>
+			</a>
+			<h1 class="flex flex-row gap-1 text-xl font-semibold">
+				<span class="grow truncate">{project.project.name}</span>
+			</h1>
+			<p class="grow">{project.project.description}</p>
+			{#if project.project.url && project.project.url.length > 0}
+				<div class="my-2 flex">
+					<a class="button sm amber relative z-2" href={project.project.url} target="_blank">
+						<ExternalLink />
+						Link to project
+					</a>
+				</div>
+			{:else}
+				<div class="mb-2"></div>
+			{/if}
+			<div class="flex flex-row gap-4">
+				<p class="grow text-sm">
+					Created <abbr title={`${project.project.createdAt.toUTCString()}`} class="relative z-2">
+						{relativeDate(project.project.createdAt)}
+					</abbr>
+					∙ {Math.floor(project.timeSpent / 60)}h {project.timeSpent % 60}min
+				</p>
+				<p class="text-sm">{projectStatuses[project.project.status]}</p>
+			</div>
+		</div>
+	{/each}
 </div>
