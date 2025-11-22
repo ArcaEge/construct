@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ca773eb9-1cc3-4450-b37d-c6965a416433",
+  "id": "50723f1d-a07f-4e74-87fa-3f3e03fd7f82",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "devlog": {
@@ -9,7 +9,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -42,8 +42,37 @@
           "notNull": true,
           "autoincrement": false
         },
-        "timestamp": {
-          "name": "timestamp",
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "model": {
+          "name": "model",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deleted": {
+          "name": "deleted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -143,7 +172,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-10-30T23:10:30.599Z\"'"
+          "default": "'\"2025-11-22T00:02:16.572Z\"'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -151,7 +180,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-10-30T23:10:30.599Z\"'"
+          "default": "'\"2025-11-22T00:02:16.572Z\"'"
         }
       },
       "indexes": {},
@@ -179,7 +208,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -389,7 +418,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -475,7 +504,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -588,13 +617,21 @@
           "notNull": true,
           "autoincrement": false
         },
-        "status": {
-          "name": "status",
+        "hackatime_trust": {
+          "name": "hackatime_trust",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'default'"
+          "default": "'blue'"
+        },
+        "trust": {
+          "name": "trust",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'blue'"
         },
         "has_session_audit_logs": {
           "name": "has_session_audit_logs",
@@ -634,7 +671,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-10-30T23:10:30.598Z\"'"
+          "default": "'\"2025-11-22T00:02:16.572Z\"'"
         },
         "last_login_at": {
           "name": "last_login_at",
@@ -642,7 +679,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-10-30T23:10:30.598Z\"'"
+          "default": "'\"2025-11-22T00:02:16.572Z\"'"
         }
       },
       "indexes": {

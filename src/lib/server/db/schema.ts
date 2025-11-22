@@ -6,10 +6,14 @@ export const user = sqliteTable('user', {
 	profilePicture: text('profilePicture').notNull(), // Profile pic URL
 	name: text('name').notNull(), // Username on Slack
 
-	status: text('status', { enum: ['trusted', 'default', 'warned', 'banned'] })
+	hackatimeTrust: text('hackatime_trust', { enum: ['green', 'blue', 'yellow', 'red'] })
 		.notNull()
-		.default('default'), // User status
+		.default('blue'), // Hackatime trust
 	// TODO: implement this properly everywhere
+
+	trust: text('trust', { enum: ['green', 'blue', 'yellow', 'red'] })
+		.notNull()
+		.default('blue'), // User trust, used if hackatime trust can't be used
 
 	hasSessionAuditLogs: integer('has_session_audit_logs', { mode: 'boolean' })
 		.notNull()

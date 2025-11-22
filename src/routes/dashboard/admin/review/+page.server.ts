@@ -30,7 +30,7 @@ export async function load({ locals }) {
 			name: user.name
 		})
 		.from(user)
-		.where(ne(user.status, 'banned'));
+		.where(and(ne(user.trust, 'red'), ne(user.hackatimeTrust, 'red'))); // hide banned users
 
 	return {
 		allProjects,
