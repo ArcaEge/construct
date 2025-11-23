@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "50723f1d-a07f-4e74-87fa-3f3e03fd7f82",
+  "id": "320487dc-2f12-4d27-b62e-69c98d7d0972",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "devlog": {
@@ -172,7 +172,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-11-22T00:02:16.572Z\"'"
+          "default": "'\"2025-11-23T22:05:52.878Z\"'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -180,7 +180,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-11-22T00:02:16.572Z\"'"
+          "default": "'\"2025-11-23T22:05:52.878Z\"'"
         }
       },
       "indexes": {},
@@ -596,6 +596,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "idv_id": {
+          "name": "idv_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "slack_id": {
           "name": "slack_id",
           "type": "text",
@@ -671,7 +678,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-11-22T00:02:16.572Z\"'"
+          "default": "'\"2025-11-23T22:05:52.877Z\"'"
         },
         "last_login_at": {
           "name": "last_login_at",
@@ -679,10 +686,17 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-11-22T00:02:16.572Z\"'"
+          "default": "'\"2025-11-23T22:05:52.877Z\"'"
         }
       },
       "indexes": {
+        "user_idv_id_unique": {
+          "name": "user_idv_id_unique",
+          "columns": [
+            "idv_id"
+          ],
+          "isUnique": true
+        },
         "user_slack_id_unique": {
           "name": "user_slack_id_unique",
           "columns": [

@@ -9,7 +9,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		event.locals.session = null;
 
 		if (routeRequiresAuth(event.route.id ? event.route.id : '')) {
-			return redirect(302, '/auth/slack');
+			return redirect(302, '/auth/idv');
 		}
 
 		return resolve(event);
@@ -27,7 +27,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	event.locals.session = session;
 
 	if (routeRequiresAuth(event.route.id ? event.route.id : '') && !event.locals.user) {
-		return redirect(302, '/auth/slack');
+		return redirect(302, '/auth/idv');
 	}
 
 	return resolve(event);

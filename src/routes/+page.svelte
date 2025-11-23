@@ -220,7 +220,7 @@
 		{#if data.loggedIn}
 			<Button text="Go to dashboard" href="/dashboard" />
 		{:else}
-			<Button text="Login with Slack" href="/auth/slack" />
+			<Button text="Login with Hack Club" href="/auth/idv" />
 		{/if}
 	</div>
 	<div class="mt-12 flex h-80 w-80 flex-col md:w-100">

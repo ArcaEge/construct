@@ -13,111 +13,116 @@ import {
 
 export async function GET(event) {
 	const url = event.url;
-	const cookies = event.cookies;
+	// const cookies = event.cookies;
 
-	const urlState = url.searchParams.get('state');
+	// const urlState = url.searchParams.get('state');
 	const code = url.searchParams.get('code');
 
-	if (!urlState || !code) {
+	// !urlState || !code
+	if (!code) {
 		return error(418);
 	}
 
-	const cookieState = cookies.get('oauth_state');
+	// const cookieState = cookies.get('oauth_state');
 
-	if (!cookieState || cookieState !== urlState) {
-		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
-		return redirect(302, redirectURL);
-	}
+	// if (!cookieState || cookieState !== urlState) {
+	// 	const redirectURL = new URL(`${url.protocol}//${url.host}/auth/failed`);
+	// 	return redirect(302, redirectURL);
+	// }
 
-	cookies.delete('oauth_state', { path: '/' });
+	// cookies.delete('oauth_state', { path: '/' });
 
 	// Get token
-	const openidConnectTokenURL = new URL('https://slack.com/api/openid.connect.token');
-	openidConnectTokenURL.searchParams.set('code', code);
-	openidConnectTokenURL.searchParams.set(
-		'client_id',
-		env.SLACK_CLIENT_ID ? env.SLACK_CLIENT_ID : ''
-	);
-	openidConnectTokenURL.searchParams.set(
-		'client_secret',
-		env.SLACK_CLIENT_SECRET ? env.SLACK_CLIENT_SECRET : ''
-	);
-	openidConnectTokenURL.searchParams.set('redirect_uri', `https://${url.host}/auth/callback`);
+	const tokenURL = new URL(`https://${env.IDV_DOMAIN}/oauth/token`);
 
-	const openidConnectTokenRes = await fetch(openidConnectTokenURL, {
-		method: 'POST'
+	const urlencoded = new URLSearchParams();
+	urlencoded.append('grant_type', 'authorization_code');
+	urlencoded.append('client_id', env.IDV_CLIENT_ID ?? '');
+	urlencoded.append('client_secret', env.IDV_CLIENT_SECRET ?? '');
+	urlencoded.append('redirect_uri', `${url.protocol}//${url.host}/auth/callback`);
+	urlencoded.append('code', code);
+
+	const tokenRes = await fetch(tokenURL, {
+		method: 'POST',
+		body: urlencoded
 	});
 
-	if (!openidConnectTokenRes.ok) {
-		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
+	if (!tokenRes.ok) {
+		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/failed`);
 		return redirect(302, redirectURL);
 	}
 
-	const openidConnectTokenJSON = await openidConnectTokenRes.json();
-
-	if (openidConnectTokenJSON['ok'] !== true) {
-		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
-		return redirect(302, redirectURL);
-	}
-
-	const token = openidConnectTokenJSON['access_token'];
+	const token = (await tokenRes.json()).access_token;
 
 	// Get user data
-	const openidConnectDataURL = new URL('https://slack.com/api/openid.connect.userInfo');
-	const openidConnectDataRes = await fetch(openidConnectDataURL, {
-		method: 'POST',
+	const userDataURL = new URL(`https://${env.IDV_DOMAIN}/api/v1/me`);
+	const userDataRes = await fetch(userDataURL, {
+		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
 	});
 
-	if (!openidConnectDataRes.ok) {
-		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
+	if (!userDataRes.ok) {
+		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/failed`);
 		return redirect(302, redirectURL);
 	}
 
-	const openidConnectDataJSON = await openidConnectDataRes.json();
+	const userDataJSON = await userDataRes.json();
 
-	if (openidConnectDataJSON['ok'] !== true) {
-		const redirectURL = new URL(`${url.protocol}//${url.host}/auth/slack`);
-		return redirect(302, redirectURL);
-	}
-
-	const slackId = openidConnectDataJSON['https://slack.com/user_id'];
-	const profilePic = openidConnectDataJSON['picture'];
-	const name = openidConnectDataJSON['name']; // TODO: make this get the user's slack handle
+	// const slackId = openidConnectDataJSON['https://slack.com/user_id'];
+	const profilePic =
+		'https://hc-cdn.hel1.your-objectstorage.com/s/v3/e4d4bc77e7a958820efea2ee55ebddf75d85993b_image.png'; // TODO: change when IDV properly implements slack
+	const { id, first_name, last_name, slack_id, ysws_eligible, verification_status } =
+		userDataJSON['identity']; // TODO: make this get the user's slack handle
 
 	// TODO: Check Hackatime API if they're banned and identity if they're verified
 	// https://identity.hackclub.com/api/external/check?slack_id=
 
 	// Check Hackatime trust
-	const hackatimeTrust = (
-		await (
-			await fetch(`https://hackatime.hackclub.com/api/v1/users/${slackId}/trust_factor`)
-		).json()
-	)['trust_level'];
+	// TODO: change when IDV properly implements slack
+	const hackatimeTrust = 'blue';
+	// const hackatimeTrust = (
+	// 	await (
+	// 		await fetch(`https://hackatime.hackclub.com/api/v1/users/${slackId}/trust_factor`)
+	// 	).json()
+	// )['trust_level'];
 
-	if (!hackatimeTrust) {
-		return error(418, { message: 'failed to fetch hackatime trust factor, please try again later' });
-	} else if (hackatimeTrust === 'red') {
-		// Prevent login
-		return redirect(302, "https://fraud.land");
-	}
+	// if (!hackatimeTrust) {
+	// 	return error(418, {
+	// 		message: 'failed to fetch hackatime trust factor, please try again later'
+	// 	});
+	// } else if (hackatimeTrust === 'red') {
+	// 	// Prevent login
+	// 	return redirect(302, 'https://fraud.land');
+	// }
+
+	// TODO: uncomment once I get verified
+	// if (!ysws_eligible) {
+	// 	const redirectURL = new URL(`${url.protocol}//${url.host}/auth/ineligible`);
+	// 	return redirect(302, redirectURL);
+	// }
 
 	// Create user if doesn't exist
-	let databaseUser = await db.select().from(user).where(eq(user.slackId, slackId)).get();
+	let databaseUser = await db.select().from(user).where(eq(user.idvId, id)).get();
 
 	if (databaseUser) {
 		// Update user (update name and profile picture and lastLoginAt on login)
 		await db
 			.update(user)
-			.set({ name: name, profilePicture: profilePic, lastLoginAt: new Date(Date.now()), hackatimeTrust })
-			.where(eq(user.slackId, slackId));
+			.set({
+				name: first_name + ' ' + last_name,
+				profilePicture: profilePic,
+				lastLoginAt: new Date(Date.now()),
+				hackatimeTrust
+			})
+			.where(eq(user.idvId, id));
 	} else {
 		// Create user
 		await db.insert(user).values({
-			slackId: slackId,
-			name: name,
+			idvId: id,
+			slackId: slack_id,
+			name: first_name + ' ' + last_name,
 			profilePicture: profilePic,
 			createdAt: new Date(Date.now()),
 			lastLoginAt: new Date(Date.now()),
@@ -129,7 +134,7 @@ export async function GET(event) {
 			hasSessionAuditLogs: true
 		});
 
-		databaseUser = await db.select().from(user).where(eq(user.slackId, slackId)).get();
+		databaseUser = await db.select().from(user).where(eq(user.idvId, id)).get();
 
 		if (!databaseUser) {
 			// Something went _really_ wrong

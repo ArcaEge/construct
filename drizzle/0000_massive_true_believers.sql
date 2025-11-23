@@ -21,8 +21,8 @@ CREATE TABLE `project` (
 	`url` text,
 	`status` text DEFAULT 'building' NOT NULL,
 	`deleted` integer DEFAULT false NOT NULL,
-	`created_at` integer DEFAULT '"2025-11-22T00:02:16.572Z"' NOT NULL,
-	`updated_at` integer DEFAULT '"2025-11-22T00:02:16.572Z"' NOT NULL,
+	`created_at` integer DEFAULT '"2025-11-23T22:05:52.878Z"' NOT NULL,
+	`updated_at` integer DEFAULT '"2025-11-23T22:05:52.878Z"' NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -82,6 +82,7 @@ CREATE TABLE `t2_review` (
 --> statement-breakpoint
 CREATE TABLE `user` (
 	`id` integer PRIMARY KEY NOT NULL,
+	`idv_id` text NOT NULL,
 	`slack_id` text NOT NULL,
 	`profilePicture` text NOT NULL,
 	`name` text NOT NULL,
@@ -91,8 +92,9 @@ CREATE TABLE `user` (
 	`has_project_audit_logs` integer DEFAULT false NOT NULL,
 	`has_t1_review` integer DEFAULT false NOT NULL,
 	`has_t2_review` integer DEFAULT false NOT NULL,
-	`created_at` integer DEFAULT '"2025-11-22T00:02:16.572Z"' NOT NULL,
-	`last_login_at` integer DEFAULT '"2025-11-22T00:02:16.572Z"' NOT NULL
+	`created_at` integer DEFAULT '"2025-11-23T22:05:52.877Z"' NOT NULL,
+	`last_login_at` integer DEFAULT '"2025-11-23T22:05:52.877Z"' NOT NULL
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `user_idv_id_unique` ON `user` (`idv_id`);--> statement-breakpoint
 CREATE UNIQUE INDEX `user_slack_id_unique` ON `user` (`slack_id`);

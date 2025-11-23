@@ -2,6 +2,7 @@ import { integer, sqliteTable, text, real } from 'drizzle-orm/sqlite-core';
 
 export const user = sqliteTable('user', {
 	id: integer('id').primaryKey(), // User ID
+	idvId: text('idv_id').notNull().unique(), // IDV ID
 	slackId: text('slack_id').notNull().unique(), // Slack ID
 	profilePicture: text('profilePicture').notNull(), // Profile pic URL
 	name: text('name').notNull(), // Username on Slack
