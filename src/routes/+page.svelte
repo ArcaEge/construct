@@ -1,8 +1,10 @@
 <script lang="ts">
+  import OrpheusFlag from '../lib/components/OrpheusFlag.svelte';
+
 	import Button from '$lib/components/Button.svelte';
 	import Accordion from '$lib/components/Accordion.svelte';
 	import Rules from './Rules.svelte';
-	import Prizes from './Prizes.svelte';
+	import Shop from './Shop.svelte';
 	import Footer from './Footer.svelte';
 
 	import model from '$lib/assets/keyring.obj?url';
@@ -154,10 +156,10 @@
 				// }
 
 				if (Array.isArray(mesh.material)) {
-						mesh.material = meshMaterial;
-					} else if (mesh.material instanceof THREE.Material) {
-						mesh.material = meshMaterial;
-					}
+					mesh.material = meshMaterial;
+				} else if (mesh.material instanceof THREE.Material) {
+					mesh.material = meshMaterial;
+				}
 
 				const edges = new THREE.EdgesGeometry(mesh.geometry);
 				const lines = new THREE.LineSegments(
@@ -211,22 +213,7 @@
 
 <Head title="" />
 
-<a href="https://hackclub.com/">
-	<img
-		class="transition-transform hover:rotate-6"
-		style="
-					transform-origin: top left;
-					position: absolute;
-					top: -5px;
-					left: 10px;
-					border: 0;
-					width: 128px;
-					z-index: 999;
-				"
-		src="https://assets.hackclub.com/flag-orpheus-top.svg"
-		alt="Hack Club"
-	/>
-</a>
+<OrpheusFlag/>
 
 <div class="flex w-full flex-col items-center justify-center px-10 lg:flex-row">
 	<div class="mt-40">
@@ -237,6 +224,7 @@
 		{:else}
 			<Button text="Login with Hack Club" href="/auth/idv" />
 		{/if}
+		<p class="text-md my-3">Ages 13-18, launching [TBD]!</p>
 	</div>
 	<div class="mt-12 flex h-100 w-80 flex-col md:w-100">
 		<canvas class="h-full w-full" id={`canvas`}></canvas>
@@ -248,15 +236,15 @@
 	<h1 class="mb-3 text-center text-3xl font-bold sm:text-4xl">What is this?</h1>
 	<div class="w-full max-w-2xl">
 		<p class="mt-3 max-w-2xl">
-			<strong>Ever wanted to own a cool rocket?</strong> Now, you can do so! All you need to do is spend
-			10 hours designing a rocket in CAD and we'll ship one right to your house, completely for free.
+			<strong>Want a 3D printer?</strong> Spend 50 hours doing CAD projects, get a free 3D printer of
+			your choice!
 		</p>
 	</div>
 </div>
 
-<Prizes />
+<Shop />
 
-<Rules />
+<Rules idvDomain={data.idvDomain} />
 
 <div class="mt-20 flex flex-col items-center justify-center px-10">
 	<h1 class="mb-3 text-center text-2xl font-bold sm:text-4xl">Frequently asked questions</h1>
@@ -269,7 +257,7 @@
 			</p>
 		</Accordion>
 		<Accordion text="What can I make?">
-			<p>Any sort of reasonable rocket design is fine, get creative!</p>
+			<p>Any reasonable CAD project is fine, get creative! However, you must have </p>
 		</Accordion>
 		<Accordion text="What are the requirements?">
 			<p>

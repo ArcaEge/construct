@@ -1,4 +1,5 @@
 <script lang="ts">
+	let { idvDomain } = $props();
 </script>
 
 <div class="mt-20 flex flex-col items-center justify-center px-10">
@@ -16,18 +17,28 @@
 						Hack Club Slack community
 					</a>.
 				</li>
+				<li>
+					You must have verified your identity at our <a
+						href={`https://${idvDomain}`}
+						class="underline"
+					>
+						identity platform
+					</a>.
+				</li>
 			</ul>
 		</div>
 		<div class="flex-1">
 			<h3 class="mb-1 text-lg font-semibold">Project requirements</h3>
 			<ul class="list-inside list-disc text-sm">
-				<li>You must spend at least 10 hours working on this.</li>
+				<li>You should spend at least 2 hours on each individual project.</li>
 				<li>
-					You must use <a href="https://onshape.com" class="underline">Onshape</a> and track your
-					time with
-					<a href="https://github.com/JeffreyWangDev/onshape-wakatime" class="underline"
-						>Onshape-Wakatime
-					</a>.
+					You should use one of our <a href="/approved-editors" class="underline">approved editors</a>.
+				</li>
+				<li>
+					You should track your time with the journaling feature.
+				</li>
+				<li>
+					You should upload your project to Printables once done.
 				</li>
 			</ul>
 		</div>

@@ -7,8 +7,8 @@
 </script>
 
 <div class="mt-16 flex flex-col items-center justify-center px-10">
-	<h1 class="mb-5 text-center text-3xl font-bold sm:text-4xl">Prizes</h1>
-	<p>You'll get one of these rockets!</p>
+	<h1 class="mb-5 text-center text-3xl font-bold sm:text-4xl">Shop</h1>
+	<p>Here are the 3D printers you can get!</p>
 	<div class="mt-5 flex flex-col gap-4 md:flex-row">
 		<ImageCard
 			title="Soyuz-FG"
@@ -26,4 +26,5 @@
 			imgsrc={prize03}
 		/>
 	</div>
+	<p class="pt-5 text-sm">...and more!</p>
 </div>
