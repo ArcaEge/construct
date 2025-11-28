@@ -9,7 +9,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 
-	let { devlog, projectId, showModifyButtons, allowDelete = true, projectName = null } = $props();
+	let { devlog, projectId, showModifyButtons, allowDelete = true, projectName = null, user = null } = $props();
 
 	// Necessary for camera/plane rotation
 	let degree = Math.PI / 180;
@@ -295,6 +295,11 @@
 	id={`devlog-${devlog.id}`}
 >
 	<p class="mb-0.5 text-sm opacity-90">
+		{#if user}
+			<a href={`/dashboard/users/${user.id}#devlog-${devlog.id}`} class="truncate underline"
+				>{user.name}</a
+			> ∙
+		{/if}
 		{#if projectName}
 			<a href={`/dashboard/projects/${projectId}#devlog-${devlog.id}`} class="truncate underline"
 				>{projectName}</a

@@ -35,12 +35,31 @@ npm run db:studio
 
 ## Deploying
 
-Create a `.env` file containing all the required credentials.
+Create a `.env` file containing all the required credentials, look at `.env.example` for an example.
 
 Use the following `docker-compose.yaml` file to deploy:
 
 ```yaml
-coming soon (will make a proper docker compose when we need to deploy on coolify)
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust # fine for testing, ideally add a password before deployment
+    volumes:
+      - constructdb:/var/lib/postgresql
+  construct:
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 3004:3000
+    env_file:
+      - .env
+    pull_policy: always
+    image: ghcr.io/arcaege/construct:latest
+networks: {}
+volumes:
+  constructdb:
 ```
 
 Use the `staging` image tag instead of `latest` for the staging environment.
